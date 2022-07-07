@@ -21,6 +21,10 @@ type Controller struct {
 	dbClient sqlDbClient
 }
 
+func NewController(dbClient sqlDbClient) *Controller {
+	return &Controller{dbClient: dbClient}
+}
+
 // CreateResource is an HTTP endpoint that creates a fictious resource using the transaction script pattern.
 // Note! Error handling and input validation have been omitted in this example, but if they were included
 // they would all be part of the same transaction script i.e. the CreateResource method.
