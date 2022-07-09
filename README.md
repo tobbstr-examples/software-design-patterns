@@ -1,6 +1,6 @@
 # business logic patterns
 
-![alt text](https://pixabay.com/get/gaab7ebf8c47a669dbfbefbd49cdfe9f23d83cca23ece5eaa00afce049dabf3136ab77fb2632d5665591f6703eecd910f7645de7b621fe40236c0fdc6ffe973142c8c2b2fd8d95fa7627d31f5b5ba359b_640.jpg "Logo Title Text 1")
+![alt text](https://pixabay.com/get/gaab7ebf8c47a669dbfbefbd49cdfe9f23d83cca23ece5eaa00afce049dabf3136ab77fb2632d5665591f6703eecd910f7645de7b621fe40236c0fdc6ffe973142c8c2b2fd8d95fa7627d31f5b5ba359b_640.jpg "Business logic layer patterns")
 
 ###### A suite of business logic layer patterns
 
