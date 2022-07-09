@@ -37,7 +37,7 @@ type OrderItem struct {
 	Quantity  int
 }
 
-// NewOrderItem is a factory function for instantiating a OrderItem value object
+// NewOrderItem is a factory function for instantiating an OrderItem value object
 func NewOrderItem(articleNo string, quantity int) (OrderItem, error) {
 	// validate input and enforce business rules
 	if articleNo == "" || len(articleNo) > 8 {
@@ -66,6 +66,7 @@ const (
 
 type OrderState int
 
+// NewOrderState is a factory function for instantiating an OrderState value object
 func NewOrderState(state int) (OrderState, error) {
 	if state < 0 || state > 2 {
 		return OrderStateCancelled, fmt.Errorf("invalid order state")
