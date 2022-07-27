@@ -1,7 +1,7 @@
 package order
 
-type Message string
+type Event string
 
-func NewMessage(msg string) Message {
-	return Message(msg)
+func NewEvent(msg string) Event {
+	return Event(msg)
 }

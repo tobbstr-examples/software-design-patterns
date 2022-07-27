@@ -13,7 +13,7 @@ type Order struct {
 	orderItems []OrderItem // the items this order consists of, which are a slice of value objects
 	state      OrderState  // the state of the order which is a value type
 
-	messages []Message // A slice of domain messages
+	events []Event // A slice of domain events
 }
 
 // NewOrder is a factory function for creating a new Order entity which begins its life cycle
@@ -61,10 +61,10 @@ func (o *Order) State() OrderState {
 	return o.state
 }
 
-// Messages returns a slice of domain messages that should be published by the application service
-func (o *Order) Messages() []Message {
-	domainMsgs := make([]Message, 0, len(o.messages))
-	copy(domainMsgs, o.messages)
+// Events returns a slice of domain events that should be published by the application service
+func (o *Order) Events() []Event {
+	domainMsgs := make([]Event, 0, len(o.events))
+	copy(domainMsgs, o.events)
 
 	return domainMsgs
 }
@@ -77,9 +77,9 @@ func (o *Order) Submit() error {
 	}
 	o.state = OrderStateSubmitted
 
-	// add domain event to domain message queue
-	submitMsg := NewMessage("submit")
-	o.messages = append(o.messages, submitMsg)
+	// add domain event to domain event queue
+	submitEvent := NewEvent("submit")
+	o.events = append(o.events, submitEvent)
 
 	return nil
 }
@@ -93,9 +93,9 @@ func (o *Order) Cancel() error {
 
 	o.state = OrderStateCancelled
 
-	// add domain event to domain message queue
-	cancelMsg := NewMessage("cancel")
-	o.messages = append(o.messages, cancelMsg)
+	// add domain event to domain event queue
+	cancelMsg := NewEvent("cancel")
+	o.events = append(o.events, cancelMsg)
 
 	return nil
 }

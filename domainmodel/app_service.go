@@ -9,8 +9,8 @@ import (
 )
 
 type (
-	messagePublisher interface {
-		Publish(ctx context.Context, msg order.Message) error
+	eventPublisher interface {
+		Publish(ctx context.Context, msg order.Event) error
 	}
 
 	txMaker interface {
@@ -19,19 +19,19 @@ type (
 )
 
 type Service struct {
-	messagePublisher messagePublisher
-	txMaker          txMaker
+	eventPublisher eventPublisher
+	txMaker        txMaker
 }
 
-func NewService(txMaker txMaker, messagePublisher messagePublisher) *Service {
+func NewService(txMaker txMaker, eventPublisher eventPublisher) *Service {
 	return &Service{
-		messagePublisher: messagePublisher,
-		txMaker:          txMaker,
+		eventPublisher: eventPublisher,
+		txMaker:        txMaker,
 	}
 }
 
 // SubmitOrder coordinates the submission of an Order. This example is a simplified version since
-// it takes a shortcut. It's missing the Outbox pattern for making sure domain messages get
+// it takes a shortcut. It's missing the Outbox pattern for making sure domain events get
 // delivered at least once.
 func (s *Service) SubmitOrder(ctx context.Context, id string) error {
 	// begin database transaction and instantiate a new order repository
@@ -61,13 +61,13 @@ func (s *Service) SubmitOrder(ctx context.Context, id string) error {
 		return fmt.Errorf("could not upsert order after submission: %w", err)
 	}
 
-	// publish domain messages to communicate the change(s) to other aggregates no matter if they belong
+	// publish domain events to communicate the change(s) to other aggregates no matter if they belong
 	// to the same monolith or some other application. This change in the system will be eventually consistent.
-	messagesCtx, cancelMessages := context.WithTimeout(ctx, 10*time.Second)
-	defer cancelMessages()
-	for _, msg := range order.Messages() {
-		// publish message
-		s.messagePublisher.Publish(messagesCtx, msg)
+	eventsCtx, cancelEvents := context.WithTimeout(ctx, 10*time.Second)
+	defer cancelEvents()
+	for _, msg := range order.Events() {
+		// publish event
+		s.eventPublisher.Publish(eventsCtx, msg)
 	}
 
 	tx.Commit()
