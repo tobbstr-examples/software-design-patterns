@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tobbstr-examples/business-logic--patterns/domainmodel/order"
+	"github.com/tobbstr-examples/business-logic-patterns/business-logic/domainmodel/order"
 )
 
 type (
