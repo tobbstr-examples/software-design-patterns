@@ -20,10 +20,12 @@ func (svc *ApplicationService) OrchestrateWritingToMultipleTables(ctx context.Co
 	doUnitOfWork := func(ctx context.Context, stores uow.Stores) error {
 		if err := stores.A().Save(ctx, "hello world"); err != nil {
 			// handle error
+			return err
 		}
 
 		if err := stores.B().Save(ctx, 5); err != nil {
 			// handle error
+			return err
 		}
 
 		return nil
