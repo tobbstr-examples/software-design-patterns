@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/stretchr/testify/require"
 	"github.com/tobbstr-examples/business-logic-patterns/structural/unit-of-work/uow"
 	uowmock "github.com/tobbstr-examples/business-logic-patterns/structural/unit-of-work/uow/mock"
 )
@@ -42,35 +43,46 @@ func TestApplicationService_OrchestrateWritingToMultipleTables(t *testing.T) {
 		ctx context.Context
 	}
 	tests := []struct {
-		name   string
-		fields fields
-		args   args
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
 	}{
 		{
 			name: "should return error when storeA.Save() fails",
 			fields: fields{
 				uowDoer: uowmock.NewDoer(&storesWithStoreAFailingOnSave),
 			},
+			wantErr: true,
 		},
 		{
 			name: "should return error when storeB.Save() fails",
 			fields: fields{
 				uowDoer: uowmock.NewDoer(&storesWithStoreBFailingOnSave),
 			},
+			wantErr: true,
 		},
 		{
-			name: "happy path",
+			name: "should return nil for happy path",
 			fields: fields{
 				uowDoer: uowmock.NewDoer(&stores),
 			},
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			// Given
+			require := require.New(t)
 			svc := &ApplicationService{
 				uowDoer: tt.fields.uowDoer,
 			}
-			svc.OrchestrateWritingToMultipleTables(tt.args.ctx)
+
+			// When
+			err := svc.OrchestrateWritingToMultipleTables(tt.args.ctx)
+
+			// Then
+			require.Equal(tt.wantErr, err != nil)
 		})
 	}
 }
