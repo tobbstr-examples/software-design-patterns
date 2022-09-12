@@ -9,19 +9,19 @@ import (
 )
 
 type Doer struct {
-	DoFn func(ctx context.Context, do uow.Do) error
+	AtomicallyFn func(ctx context.Context, uowFn uow.Do) error
 }
 
 func NewDoer(stores uow.Stores) *Doer {
 	return &Doer{
-		DoFn: func(ctx context.Context, do uow.Do) error {
-			return do(ctx, stores)
+		AtomicallyFn: func(ctx context.Context, uowFn uow.Do) error {
+			return uowFn(ctx, stores)
 		},
 	}
 }
 
-func (m *Doer) Do(ctx context.Context, do uow.Do) error {
-	return m.DoFn(ctx, do)
+func (m *Doer) Atomically(ctx context.Context, do uow.Do) error {
+	return m.AtomicallyFn(ctx, do)
 }
 
 type Stores struct {

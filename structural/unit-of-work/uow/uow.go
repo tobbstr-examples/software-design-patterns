@@ -35,5 +35,6 @@ type Do func(ctx context.Context, stores Stores) error
 // Doer is the dependency any object needs to have in order to perform transactional logic.
 // See app_svc.go file for more information.
 type Doer interface {
-	Do(ctx context.Context, do Do) error
+	// Atomically executes do atomically.
+	Atomically(ctx context.Context, do Do) error
 }

@@ -46,7 +46,7 @@ func NewUoWDoer(db sql.DB) *UnitOfWorkDoer {
 	return &UnitOfWorkDoer{db: db}
 }
 
-func (w *UnitOfWorkDoer) Do(ctx context.Context, do uow.Do) error {
+func (w *UnitOfWorkDoer) Atomically(ctx context.Context, do uow.Do) error {
 	tx, _ := w.db.Begin()
 
 	unitOfWorkStores := &unitOfWorkStores{

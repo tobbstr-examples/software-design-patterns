@@ -17,7 +17,7 @@ func NewApplicationService(uowDoer uow.Doer) *ApplicationService {
 func (svc *ApplicationService) OrchestrateWritingToMultipleTables(ctx context.Context) error {
 	// This is the implementation of the uow.Do() function. In other words,
 	// it's the actual transaction the ApplicationService orchestrates in this method.
-	doUnitOfWork := func(ctx context.Context, stores uow.Stores) error {
+	doUow := func(ctx context.Context, stores uow.Stores) error {
 		if err := stores.A().Save(ctx, "hello world"); err != nil {
 			// handle error or return it
 			return err
@@ -31,7 +31,7 @@ func (svc *ApplicationService) OrchestrateWritingToMultipleTables(ctx context.Co
 		return nil
 	}
 
-	if err := svc.uowDoer.Do(ctx, doUnitOfWork); err != nil {
+	if err := svc.uowDoer.Atomically(ctx, doUow); err != nil {
 		// handle error or return it
 		return err
 	}
